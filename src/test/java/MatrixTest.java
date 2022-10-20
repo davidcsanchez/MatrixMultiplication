@@ -1,7 +1,9 @@
 import es.ulpgc.Matrix;
+import es.ulpgc.builders.SparseMatrixBuilder;
 import es.ulpgc.matrices.CcsMatrix;
 import es.ulpgc.matrices.CrsMatrix;
 import es.ulpgc.matrices.DenseMatrix;
+import es.ulpgc.matrices.SparseMatrix;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -46,8 +48,15 @@ public class MatrixTest {
     public static Collection<Matrix> implementations() {
         return List.of(new DenseMatrix(getSimpleMatrix()),
             getCrsMatrixForTesting(),
-            getCcsMatrixForTesting()
+            getCcsMatrixForTesting(),
+            getSparseMatrixForTesting()
         );
+    }
+
+    private static SparseMatrix getSparseMatrixForTesting() {
+        SparseMatrixBuilder sparseMatrixBuilder = new SparseMatrixBuilder(4);
+        sparseMatrixBuilder.set(new DenseMatrix(getSimpleMatrix()));
+        return (SparseMatrix) sparseMatrixBuilder.build();
     }
 
     private static CrsMatrix getCrsMatrixForTesting() {

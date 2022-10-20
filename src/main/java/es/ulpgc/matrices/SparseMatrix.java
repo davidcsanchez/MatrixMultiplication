@@ -23,7 +23,9 @@ public class SparseMatrix implements Matrix {
 
     @Override
     public double[][] raw() {
-        return new double[0][];
+        double[][] raw = new double[size][size];
+        values.forEach(coordinate -> raw[coordinate.row][coordinate.col] = coordinate.value);
+        return raw;
     }
 
     @Override
@@ -33,27 +35,6 @@ public class SparseMatrix implements Matrix {
 
     @Override
     public double density() {
-        return 0;
-    }
-
-    private static class Coordinate {
-
-        private final int row;
-        private final int col;
-        private final double value;
-
-        public Coordinate(int row, int col, double value) {
-            this.row = row;
-            this.col = col;
-            this.value = value;
-        }
-
-        public boolean checkSameCoords(int newRow, int newCol) {
-            return (newRow == row && newCol == col);
-        }
-
-        public double value() {
-            return value;
-        }
+        return values.size() / Math.pow(size,2);
     }
 }
