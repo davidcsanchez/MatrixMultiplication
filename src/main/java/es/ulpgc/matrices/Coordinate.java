@@ -12,12 +12,12 @@ public class Coordinate implements Comparable<Coordinate> {
         this.value = value;
     }
 
-    public boolean checkSameCoords(int newRow, int newCol) {
+    public boolean checkEquals(int newRow, int newCol) {
         return (newRow == row && newCol == col);
     }
 
     @Override
     public int compareTo(Coordinate o) {
-        return o.row - this.row;
+        return this.row - o.row;
     }
 }

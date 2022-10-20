@@ -17,7 +17,7 @@ public class SparseMatrix implements Matrix {
     @Override
     public double value(int row, int col) {
         if (row > size() || col > size()) throw new RuntimeException("Exceeded the matrix length");
-        return values.stream().filter(coordinate -> coordinate.checkSameCoords(row, col))
+        return values.stream().filter(coordinate -> coordinate.checkEquals(row, col))
             .findFirst().stream().mapToDouble(coordinate -> coordinate.value).findFirst().orElse(0);
     }
 

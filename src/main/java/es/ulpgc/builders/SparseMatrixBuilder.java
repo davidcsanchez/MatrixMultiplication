@@ -6,7 +6,7 @@ import es.ulpgc.matrices.Coordinate;
 import es.ulpgc.matrices.SparseMatrix;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class SparseMatrixBuilder implements MatrixBuilder {
@@ -20,6 +20,7 @@ public class SparseMatrixBuilder implements MatrixBuilder {
 
     @Override
     public Matrix build() {
+        Collections.sort(coordinates);
         return new SparseMatrix(coordinates, size);
     }
 
@@ -30,11 +31,17 @@ public class SparseMatrixBuilder implements MatrixBuilder {
 
     @Override
     public void set(Matrix matrix) {
+        isEmpty();
         for (int row = 0; row < matrix.size(); row++) {
             for (int col = 0; col < matrix.size(); col++) {
                 if (matrix.value(row, col) == 0d) continue;
                 coordinates.add(new Coordinate(row, col, matrix.value(row, col)));
             }
         }
+    }
+
+    private void isEmpty() {
+        if (coordinates.isEmpty()) return;
+        throw new RuntimeException("There are already values in this builder");
     }
 }
