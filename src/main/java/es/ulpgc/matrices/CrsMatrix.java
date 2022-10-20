@@ -18,14 +18,17 @@ public class CrsMatrix implements Matrix {
 
     @Override
     public double value(int row, int col) {
-        return 0;
+        if (row > size() || col > size()) throw new RuntimeException("Exceeded the matrix length");
+        return IntStream.range(rowPointers[row], rowPointers[row + 1])
+            .filter(currentValueId -> columns[currentValueId] == col)
+            .mapToDouble(currentValueId -> values[currentValueId]).findFirst().orElse(0d);
     }
 
     @Override
     public double[][] raw() {
         int size = size();
         double[][] matrix = new double[size][size];
-        IntStream.range(0, size - 1).forEach(rowId -> fillRow(matrix, rowId));
+        IntStream.range(0, size).forEach(rowId -> fillRow(matrix, rowId));
         return matrix;
     }
 
@@ -36,11 +39,11 @@ public class CrsMatrix implements Matrix {
 
     @Override
     public int size() {
-        return rowPointers.length;
+        return rowPointers.length - 1;
     }
 
     @Override
     public double density() {
-        return (double) values.length / rowPointers.length;
+        return (double) values.length / Math.pow(rowPointers.length - 1, 2);
     }
 }

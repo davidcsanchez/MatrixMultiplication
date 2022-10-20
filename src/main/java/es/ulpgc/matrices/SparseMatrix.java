@@ -6,11 +6,19 @@ import java.util.List;
 
 public class SparseMatrix implements Matrix {
 
-    private List<Coordinate> list;
+    private final List<Coordinate> values;
+    private final int size;
+
+    public SparseMatrix(List<Coordinate> values, int size) {
+        this.values = values;
+        this.size = size;
+    }
 
     @Override
     public double value(int row, int col) {
-        return 0;
+        if (row > size() || col > size()) throw new RuntimeException("Exceeded the matrix length");
+        return values.stream().filter(coordinate -> coordinate.checkSameCoords(row, col))
+            .findFirst().stream().mapToDouble(coordinate -> coordinate.value).findFirst().orElse(0);
     }
 
     @Override
@@ -20,7 +28,7 @@ public class SparseMatrix implements Matrix {
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
@@ -41,7 +49,7 @@ public class SparseMatrix implements Matrix {
         }
 
         public boolean checkSameCoords(int newRow, int newCol) {
-            return (newRow == row && newRow == col);
+            return (newRow == row && newCol == col);
         }
 
         public double value() {
