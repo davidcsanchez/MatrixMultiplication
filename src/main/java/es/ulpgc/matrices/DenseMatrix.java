@@ -30,9 +30,9 @@ public class DenseMatrix implements Matrix {
     @Override
     public double density() {
         double nonZeroValues = Math.toIntExact(Arrays.stream(values)
-            .flatMapToDouble(Arrays::stream)
-            .filter(value -> value != 0d)
-            .count());
+                .flatMapToDouble(Arrays::stream)
+                .filter(value -> value != 0d)
+                .count());
         return nonZeroValues / (Math.pow(values.length, 2));
     }
 }

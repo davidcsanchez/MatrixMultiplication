@@ -7,21 +7,21 @@ import java.util.stream.IntStream;
 public class CcsMatrix implements Matrix {
 
     public final int[] rows;
-    public final int[] columnPointers;
+    public final int[] colPointers;
     public final double[] values;
 
-    public CcsMatrix(int[] rows, int[] columnPointers, double[] values) {
+    public CcsMatrix(int[] rows, int[] colPointers, double[] values) {
         this.rows = rows;
-        this.columnPointers = columnPointers;
+        this.colPointers = colPointers;
         this.values = values;
     }
 
     @Override
     public double value(int row, int col) {
         if (row > size() || col > size()) throw new RuntimeException("Exceeded the matrix length");
-        return IntStream.range(columnPointers[col], columnPointers[col + 1])
-            .filter(currentValueId -> rows[currentValueId] == row)
-            .mapToDouble(currentValueId -> values[currentValueId]).findFirst().orElse(0d);
+        return IntStream.range(colPointers[col], colPointers[col + 1])
+                .filter(currentValueId -> rows[currentValueId] == row)
+                .mapToDouble(currentValueId -> values[currentValueId]).findFirst().orElse(0d);
     }
 
     @Override
@@ -33,17 +33,17 @@ public class CcsMatrix implements Matrix {
     }
 
     private void fillCol(double[][] matrix, int colId) {
-        IntStream.range(columnPointers[colId], columnPointers[colId + 1]).forEach(index ->
-            matrix[rows[index]][colId] = values[index]);
+        IntStream.range(colPointers[colId], colPointers[colId + 1]).forEach(index ->
+                matrix[rows[index]][colId] = values[index]);
     }
 
     @Override
     public int size() {
-        return columnPointers.length - 1;
+        return colPointers.length - 1;
     }
 
     @Override
     public double density() {
-        return (double) values.length / Math.pow(columnPointers.length - 1, 2);
+        return (double) values.length / Math.pow(colPointers.length - 1, 2);
     }
 }

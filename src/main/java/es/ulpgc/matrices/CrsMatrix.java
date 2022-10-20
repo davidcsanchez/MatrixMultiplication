@@ -20,8 +20,8 @@ public class CrsMatrix implements Matrix {
     public double value(int row, int col) {
         if (row > size() || col > size()) throw new RuntimeException("Exceeded the matrix length");
         return IntStream.range(rowPointers[row], rowPointers[row + 1])
-            .filter(currentValueId -> columns[currentValueId] == col)
-            .mapToDouble(currentValueId -> values[currentValueId]).findFirst().orElse(0d);
+                .filter(currentValueId -> columns[currentValueId] == col)
+                .mapToDouble(currentValueId -> values[currentValueId]).findFirst().orElse(0d);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class CrsMatrix implements Matrix {
 
     private void fillRow(double[][] matrix, int rowId) {
         IntStream.range(rowPointers[rowId], rowPointers[rowId + 1]).forEach(index ->
-            matrix[rowId][columns[index]] = values[index]);
+                matrix[rowId][columns[index]] = values[index]);
     }
 
     @Override
