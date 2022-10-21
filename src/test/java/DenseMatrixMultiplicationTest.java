@@ -54,6 +54,8 @@ public class DenseMatrixMultiplicationTest {
             new DenseMatrixParallelMultiplication(),
             new DenseMatrixParallelStreamMultiplication(),
             new DenseMatrixParallelSynchronizedMultiplication(),
+            new DenseMatrixSemaphoreMultiplication(),
+            new DenseMatrixThreadPoolMultiplication(),
             new DenseMatrixSemaphoreMultiplication()
         );
     }
