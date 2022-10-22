@@ -3,9 +3,12 @@ package benchmarkings;
 import es.ulpgc.Multiplication;
 import es.ulpgc.compressors.CcsCompressor;
 import es.ulpgc.compressors.CrsCompressor;
+import es.ulpgc.deserializers.MtxToCssMatrixDeserializer;
 import es.ulpgc.deserializers.MtxToSparseMatrixDeserializer;
+import es.ulpgc.matrices.CcsMatrix;
 import es.ulpgc.matrices.SparseMatrix;
 import es.ulpgc.multiplications.CompressedSparseMatrixMultiplication;
+import es.ulpgc.transposers.CcsMatrixTransposer;
 import org.openjdk.jmh.annotations.*;
 
 @BenchmarkMode(Mode.AverageTime)
@@ -18,7 +21,7 @@ public class MtxCompressedSparseMatrixMultiplicationBenchmark {
     public static void mtxCompressedSparseMatrixMultiplicationBenchmark() {executeWith(new CompressedSparseMatrixMultiplication());}
 
     private static void executeWith(Multiplication implementation) {
-        SparseMatrix matrix = new MtxToSparseMatrixDeserializer().deserialize("mc2depi.mtx");
-        implementation.execute(new CrsCompressor(matrix).compress(), new CcsCompressor(matrix).compress());
+        CcsMatrix matrix = new MtxToCssMatrixDeserializer().deserialize("mc2depi.mtx");
+        implementation.execute(new CcsMatrixTransposer().execute(matrix), matrix);
     }
 }

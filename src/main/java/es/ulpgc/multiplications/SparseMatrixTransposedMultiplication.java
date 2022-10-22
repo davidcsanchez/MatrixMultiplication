@@ -3,14 +3,14 @@ package es.ulpgc.multiplications;
 import es.ulpgc.Matrix;
 import es.ulpgc.MatrixException;
 import es.ulpgc.Multiplication;
-import es.ulpgc.Transposer;
+import es.ulpgc.MatrixTransposer;
 import es.ulpgc.builders.SparseMatrixBuilder;
 import es.ulpgc.matrices.SparseMatrix;
 
 public class SparseMatrixTransposedMultiplication implements Multiplication {
-    private final Transposer transposer;
+    private final MatrixTransposer transposer;
 
-    public SparseMatrixTransposedMultiplication(Transposer transposer) {
+    public SparseMatrixTransposedMultiplication(MatrixTransposer transposer) {
         this.transposer = transposer;
     }
 

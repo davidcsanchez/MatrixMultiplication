@@ -1,5 +1,6 @@
 import es.ulpgc.Matrix;
 import es.ulpgc.MatrixDeserializer;
+import es.ulpgc.deserializers.MtxToCssMatrixDeserializer;
 import es.ulpgc.deserializers.MtxToSparseMatrixDeserializer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +33,8 @@ public class DeserializerTest {
     @Parameterized.Parameters
     public static Collection<MatrixDeserializer> implementations() {
         return List.of(
-            new MtxToSparseMatrixDeserializer()
+                new MtxToSparseMatrixDeserializer(),
+                new MtxToCssMatrixDeserializer()
         );
     }
 }

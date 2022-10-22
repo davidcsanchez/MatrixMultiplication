@@ -3,13 +3,13 @@ package es.ulpgc.multiplications;
 import es.ulpgc.Matrix;
 import es.ulpgc.MatrixException;
 import es.ulpgc.Multiplication;
-import es.ulpgc.Transposer;
+import es.ulpgc.MatrixTransposer;
 import es.ulpgc.matrices.DenseMatrix;
 
 public class DenseMatrixTransposedMultiplication implements Multiplication {
-    private final Transposer transposer;
+    private final MatrixTransposer transposer;
 
-    public DenseMatrixTransposedMultiplication(Transposer transposer) {
+    public DenseMatrixTransposedMultiplication(MatrixTransposer transposer) {
         this.transposer = transposer;
     }
 

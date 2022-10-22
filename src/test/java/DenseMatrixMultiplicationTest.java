@@ -2,7 +2,7 @@ import es.ulpgc.Matrix;
 import es.ulpgc.Multiplication;
 import es.ulpgc.matrices.DenseMatrix;
 import es.ulpgc.multiplications.DenseMatrixParallelStreamMultiplication;
-import es.ulpgc.multiplications.DenseMatrixRowMultiplication;
+import es.ulpgc.multiplications.DenseMatrixLoopInterchangeMultiplication;
 import es.ulpgc.multiplications.DenseMatrixStandardMultiplication;
 import es.ulpgc.multiplications.DenseMatrixTransposedMultiplication;
 import es.ulpgc.transposers.DenseMatrixTransposer;
@@ -52,7 +52,7 @@ public class DenseMatrixMultiplicationTest {
     public static Collection<Multiplication> implementations() {
         return List.of(
                 new DenseMatrixStandardMultiplication(),
-                new DenseMatrixRowMultiplication(),
+                new DenseMatrixLoopInterchangeMultiplication(),
                 new DenseMatrixTransposedMultiplication(new DenseMatrixTransposer()),
                 new DenseMatrixParallelStreamMultiplication()
         );

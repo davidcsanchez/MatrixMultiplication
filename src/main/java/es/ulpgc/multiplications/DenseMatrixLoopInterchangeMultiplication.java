@@ -5,7 +5,7 @@ import es.ulpgc.MatrixException;
 import es.ulpgc.Multiplication;
 import es.ulpgc.matrices.DenseMatrix;
 
-public class DenseMatrixRowMultiplication implements Multiplication {
+public class DenseMatrixLoopInterchangeMultiplication implements Multiplication {
     @Override
     public Matrix execute(Matrix a, Matrix b) {
         checkIsDenseMatrix(a);
