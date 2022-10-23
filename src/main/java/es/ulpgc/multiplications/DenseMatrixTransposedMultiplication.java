@@ -3,20 +3,20 @@ package es.ulpgc.multiplications;
 import es.ulpgc.Matrix;
 import es.ulpgc.MatrixException;
 import es.ulpgc.Multiplication;
-import es.ulpgc.Transposer;
+import es.ulpgc.MatrixTransposer;
 import es.ulpgc.matrices.DenseMatrix;
 
 public class DenseMatrixTransposedMultiplication implements Multiplication {
-    private final Transposer transposer;
+    private final MatrixTransposer transposer;
 
-    public DenseMatrixTransposedMultiplication(Transposer transposer) {
+    public DenseMatrixTransposedMultiplication(MatrixTransposer transposer) {
         this.transposer = transposer;
     }
 
     @Override
     public Matrix execute(Matrix a, Matrix b) {
-        checkisDenseMatrix(a);
-        checkisDenseMatrix(b);
+        checkIsDenseMatrix(a);
+        checkIsDenseMatrix(b);
         Matrix transposed = transposer.execute(b);
         int size = a.size();
         double[][] c = new double[size][size];
@@ -27,7 +27,7 @@ public class DenseMatrixTransposedMultiplication implements Multiplication {
         return new DenseMatrix(c);
     }
 
-    private void checkisDenseMatrix(Matrix matrix) {
+    private void checkIsDenseMatrix(Matrix matrix) {
         if (matrix instanceof DenseMatrix) return;
         throw new MatrixException("Supplied Matrix is of unsupported type");
     }

@@ -4,7 +4,7 @@ import es.ulpgc.Matrix;
 import es.ulpgc.Multiplication;
 import es.ulpgc.matrices.DenseMatrix;
 import es.ulpgc.multiplications.DenseMatrixParallelStreamMultiplication;
-import es.ulpgc.multiplications.DenseMatrixRowMultiplication;
+import es.ulpgc.multiplications.DenseMatrixLoopInterchangeMultiplication;
 import es.ulpgc.multiplications.DenseMatrixStandardMultiplication;
 import es.ulpgc.multiplications.DenseMatrixTransposedMultiplication;
 import es.ulpgc.transposers.DenseMatrixTransposer;
@@ -17,7 +17,7 @@ import java.util.Random;
 @Warmup(iterations = 3, time = 2)
 @Measurement(iterations = 3, time = 2)
 public class DenseMatrixMultiplicationBenchmark {
-    private static final int SIZE = 1024;
+    private static final int SIZE = 20;
     private static final Random random = new Random();
 
     @Benchmark
@@ -27,7 +27,7 @@ public class DenseMatrixMultiplicationBenchmark {
 
     @Benchmark
     public static void DenseMatrixRowMultiplication() {
-        executeWith(new DenseMatrixRowMultiplication());
+        executeWith(new DenseMatrixLoopInterchangeMultiplication());
     }
 
     @Benchmark

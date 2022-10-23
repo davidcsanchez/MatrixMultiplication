@@ -1,10 +1,10 @@
 package es.ulpgc.transposers;
 
 import es.ulpgc.Matrix;
-import es.ulpgc.Transposer;
+import es.ulpgc.MatrixTransposer;
 import es.ulpgc.matrices.DenseMatrix;
 
-public class DenseMatrixTransposer implements Transposer {
+public class DenseMatrixTransposer implements MatrixTransposer {
     @Override
     public Matrix execute(Matrix matrix) {
         int size = matrix.size();

@@ -1,8 +1,6 @@
 package es.ulpgc.deserializers;
 
 import es.ulpgc.MatrixDeserializer;
-import es.ulpgc.matrices.CcsMatrix;
-import es.ulpgc.matrices.Coordinate;
 import es.ulpgc.matrices.SparseMatrix;
 
 import java.io.BufferedReader;
@@ -12,16 +10,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class MtxToSparseDeserializer implements MatrixDeserializer {
-
-    private final List<Coordinate> items = new ArrayList<>();
-    private int size;
+public class MtxToSparseMatrixDeserializer implements MatrixDeserializer {
 
     @Override
     public SparseMatrix deserialize(String filename) {
-        InputStream is = MtxToSparseDeserializer.getInputStream(filename);
-        BufferedReader reader = MtxToSparseDeserializer.getBufferedReader(is);
+        InputStream is = MtxToSparseMatrixDeserializer.getInputStream(filename);
+        BufferedReader reader = MtxToSparseMatrixDeserializer.getBufferedReader(is);
         return readFile(reader);
     }
 
@@ -36,18 +32,17 @@ public class MtxToSparseDeserializer implements MatrixDeserializer {
     }
 
     private SparseMatrix readFile(BufferedReader reader) {
-        size = reader.lines().filter(line -> !line.startsWith("%"))
+        int size = reader.lines().filter(line -> !line.startsWith("%"))
             .map(this::getSize).findFirst().orElse(0);
-        reader.lines().forEach(line -> saveValues(getLineValues(line)));
-        return new SparseMatrix(items, size);
+        return new SparseMatrix(reader.lines().map(line -> saveValues(getLineValues(line))).collect(Collectors.toList()), size);
     }
 
     private int getSize(String line) {
         return Arrays.stream(line.split(" ")).mapToInt(Integer::parseInt).toArray()[0];
     }
 
-    private void saveValues(double[] lineValues) {
-        this.items.add(new Coordinate((int) lineValues[0] - 1, (int) lineValues[1] - 1, lineValues[2]));
+    private SparseMatrix.Coordinate saveValues(double[] lineValues) {
+        return new SparseMatrix.Coordinate((int) lineValues[0] - 1, (int) lineValues[1] - 1, lineValues[2]);
     }
 
     private double[] getLineValues(String line) {

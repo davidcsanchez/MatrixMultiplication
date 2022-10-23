@@ -5,11 +5,11 @@ import es.ulpgc.MatrixException;
 import es.ulpgc.Multiplication;
 import es.ulpgc.matrices.DenseMatrix;
 
-public class DenseMatrixRowMultiplication implements Multiplication {
+public class DenseMatrixLoopInterchangeMultiplication implements Multiplication {
     @Override
     public Matrix execute(Matrix a, Matrix b) {
-        checkisDenseMatrix(a);
-        checkisDenseMatrix(b);
+        checkIsDenseMatrix(a);
+        checkIsDenseMatrix(b);
         int size = a.size();
         double[][] c = new double[size][size];
         for (int i = 0; i < size; i++)
@@ -19,7 +19,7 @@ public class DenseMatrixRowMultiplication implements Multiplication {
         return new DenseMatrix(c);
     }
 
-    private void checkisDenseMatrix(Matrix matrix) {
+    private void checkIsDenseMatrix(Matrix matrix) {
         if (matrix instanceof DenseMatrix) return;
         throw new MatrixException("Supplied Matrix is of unsupported type");
     }
