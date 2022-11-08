@@ -12,14 +12,16 @@ public class SparseMatrixStandardMultiplication implements Multiplication {
         checkIsSparseMatrix(a);
         checkIsSparseMatrix(b);
         int size = a.size();
+        double[][] aValues = a.raw();
+        double[][] bValues = b.raw();
         double sum;
         SparseMatrixBuilder builder = new SparseMatrixBuilder(size);
         for (int i = 0; i < size; i++)
             for (int j = 0; j < size; j++) {
                 sum = 0;
                 for (int k = 0; k < size; k++) {
-                    if (a.value(i, k) == 0 || b.value(k, j) == 0) continue;
-                    sum += a.value(i, k) * b.value(k, j);
+                    if (aValues[i][k] == 0 || bValues[k][j] == 0) continue;
+                    sum += aValues[i][k] * bValues[k][j];
                 }
                 builder.set(i, j, sum);
             }
