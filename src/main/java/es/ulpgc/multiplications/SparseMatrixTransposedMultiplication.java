@@ -20,14 +20,16 @@ public class SparseMatrixTransposedMultiplication implements Multiplication {
         checkIsSparseMatrix(b);
         Matrix transposed = transposer.execute(b);
         int size = a.size();
+        double[][] aValues = a.raw();
+        double[][] tValues = transposed.raw();
         double sum;
         SparseMatrixBuilder builder = new SparseMatrixBuilder(size);
         for (int i = 0; i < size; i++)
             for (int j = 0; j < size; j++) {
                 sum = 0;
                 for (int k = 0; k < size; k++) {
-                    if (a.value(i, k) == 0 || transposed.value(j, k) == 0) continue;
-                    sum += a.value(i, k) * transposed.value(j, k);
+                    if (aValues[i][k] == 0 || tValues[j][k] == 0) continue;
+                    sum += aValues[i][k] * tValues[j][k];
                 }
                 builder.set(i, j, sum);
             }

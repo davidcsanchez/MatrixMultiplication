@@ -34,14 +34,14 @@ public class SparseMatrixMultiplicationTest {
         Random random = new Random();
         SparseMatrixBuilder builder = new SparseMatrixBuilder(SIZE);
         for (int i = 0; i < SIZE; i++) {
-            List<Integer> positions = RandomPositions(random);
+            Set<Integer> positions = RandomPositions(random);
             for (Integer position : positions) builder.set(position, i, random.nextDouble());
         }
         return builder.build();
     }
 
-    private List<Integer> RandomPositions(Random random) {
-        List<Integer> result = new ArrayList<>();
+    private Set<Integer> RandomPositions(Random random) {
+        Set<Integer> result = new HashSet<>();
         int nonzeros = random.ints(0, SIZE / 2)
                 .findFirst()
                 .getAsInt();
