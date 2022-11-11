@@ -48,12 +48,13 @@ public class DenseMatrixMultiplicationTest {
     @Parameterized.Parameters
     public static Collection<Multiplication> implementations() {
         return List.of(
-                new DenseMatrixStandardMultiplication(),
-                new DenseMatrixLoopInterchangeMultiplication(),
-                new DenseMatrixTransposedMultiplication(new DenseMatrixTransposer()),
-                new DenseMatrixParallelMultiplication(),
-                new DenseMatrixParallelStreamMultiplication(),
-                new DenseMatrixParallelSynchronizedMultiplication()
+            new DenseMatrixStandardMultiplication(),
+            new DenseMatrixLoopInterchangeMultiplication(),
+            new DenseMatrixTransposedMultiplication(new DenseMatrixTransposer()),
+            new DenseMatrixParallelMultiplication(),
+            new DenseMatrixParallelStreamMultiplication(),
+            new DenseMatrixParallelSynchronizedMultiplication(),
+            new DenseMatrixSemaphoreMultiplication()
         );
     }
 }
