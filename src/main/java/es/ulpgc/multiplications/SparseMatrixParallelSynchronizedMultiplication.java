@@ -4,6 +4,7 @@ import es.ulpgc.Matrix;
 import es.ulpgc.MatrixException;
 import es.ulpgc.Multiplication;
 import es.ulpgc.builders.SparseMatrixBuilder;
+import es.ulpgc.matrices.DenseMatrix;
 import es.ulpgc.matrices.SparseMatrix;
 
 import java.util.concurrent.ExecutorService;
@@ -23,22 +24,21 @@ public class SparseMatrixParallelSynchronizedMultiplication implements Multiplic
             SparseMatrixBuilder builder = new SparseMatrixBuilder(a.size());
             double[][] aValues = a.raw();
             double[][] bValues = b.raw();
+            double[][] c = new double[a.size()][a.size()];
             for (int i = 0; i < a.size(); i++) {
                 executor.submit(() -> {
                     int row = context.nextRow();
-                    double sum;
                     for (int j = 0; j < a.size(); j++) {
-                        sum = 0;
                         for (int k = 0; k < a.size(); k++) {
                             if (aValues[row][k] == 0 || bValues[k][j] == 0) continue;
-                            sum += aValues[row][k] * bValues[k][j];
+                            c[row][j] += aValues[row][k] * bValues[k][j];
                         }
-                        builder.set(row, j, sum);
                     }
                 });
             }
             executor.shutdown();
             executor.awaitTermination(1, TimeUnit.MINUTES);
+            builder.set(new DenseMatrix(c));
             return builder.build();
         } catch (Exception e) {
             throw new RuntimeException(e);

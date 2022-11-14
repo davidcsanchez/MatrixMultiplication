@@ -1,10 +1,10 @@
 package es.ulpgc.multiplications;
 
 import es.ulpgc.Matrix;
-import es.ulpgc.MatrixBuilder;
 import es.ulpgc.MatrixException;
 import es.ulpgc.Multiplication;
 import es.ulpgc.builders.SparseMatrixBuilder;
+import es.ulpgc.matrices.DenseMatrix;
 import es.ulpgc.matrices.SparseMatrix;
 
 import java.util.ArrayList;
@@ -20,9 +20,9 @@ public class SparseMatrixParallelMultiplication implements Multiplication {
         try {
             checkIsSparseMatrix(a);
             checkIsSparseMatrix(b);
-            SparseMatrixBuilder builder = new SparseMatrixBuilder(a.size());
+            double[][] c = new double[a.size()][a.size()];
             for (int i = 0; i < a.size(); i++) {
-                RowMultiplicationTask task = new RowMultiplicationTask(a.raw(), b.raw(), i, builder);
+                RowMultiplicationTask task = new RowMultiplicationTask(new DenseMatrix(a.raw()), new DenseMatrix(b.raw()), i, c);
                 Thread thread = new Thread(task);
                 thread.start();
                 threads.add(thread);
@@ -31,6 +31,8 @@ public class SparseMatrixParallelMultiplication implements Multiplication {
                 }
             }
             waitForThreads();
+            SparseMatrixBuilder builder = new SparseMatrixBuilder(a.size());
+            builder.set(new DenseMatrix(c));
             return builder.build();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -50,29 +52,25 @@ public class SparseMatrixParallelMultiplication implements Multiplication {
     }
 
     private static class RowMultiplicationTask implements Runnable {
-        private final double[][] a;
-        private final double[][] b;
+        private final Matrix a;
+        private final Matrix b;
         private final int row;
-        private final MatrixBuilder builder;
+        private final double[][] c;
 
-        public RowMultiplicationTask(double[][] a, double[][] b, int row, SparseMatrixBuilder builder) {
+        public RowMultiplicationTask(Matrix a, Matrix b, int row, double[][] c) {
             this.a = a;
             this.b = b;
             this.row = row;
-            this.builder = builder;
+            this.c = c;
         }
 
         @Override
         public void run() {
-            double sum;
-            for (int i = 0; i < a[0].length; i++) {
-                sum = 0;
-                for (int j = 0; j < a[0].length; j++) {
-                    if (a[row][j] == 0 || b[j][i] == 0) continue;
-                    sum += a[row][j] * b[j][i];
+            for (int i = 0; i < a.size(); i++)
+                for (int j = 0; j < a.size(); j++) {
+                    if (a.value(row, j) == 0 || b.value(j, i) == 0) continue;
+                    c[row][i] += a.value(row, j) * b.value(j, i);
                 }
-                builder.set(row, i, sum);
-            }
         }
     }
 }
