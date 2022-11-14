@@ -1,6 +1,8 @@
 import es.ulpgc.Matrix;
 import es.ulpgc.Multiplication;
 import es.ulpgc.builders.SparseMatrixBuilder;
+import es.ulpgc.multiplications.SparseMatrixParallelMultiplication;
+import es.ulpgc.multiplications.SparseMatrixParallelSynchronizedMultiplication;
 import es.ulpgc.multiplications.SparseMatrixStandardMultiplication;
 import es.ulpgc.multiplications.SparseMatrixTransposedMultiplication;
 import es.ulpgc.transposers.SparseMatrixTransposer;
@@ -14,7 +16,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @RunWith(Parameterized.class)
 public class SparseMatrixMultiplicationTest {
-    private final int SIZE = 80;
+    private final int SIZE = 50;
     private final Multiplication multiplication;
 
     public SparseMatrixMultiplicationTest(Multiplication multiplication) {
@@ -57,7 +59,9 @@ public class SparseMatrixMultiplicationTest {
     public static Collection<Multiplication> implementation() {
         return List.of(
                 new SparseMatrixStandardMultiplication(),
-                new SparseMatrixTransposedMultiplication(new SparseMatrixTransposer())
+                new SparseMatrixTransposedMultiplication(new SparseMatrixTransposer()),
+                new SparseMatrixParallelMultiplication(),
+                new SparseMatrixParallelSynchronizedMultiplication()
         );
     }
 }
