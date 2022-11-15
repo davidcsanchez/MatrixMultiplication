@@ -1,7 +1,10 @@
 import es.ulpgc.Matrix;
 import es.ulpgc.Multiplication;
 import es.ulpgc.matrices.DenseMatrix;
-import es.ulpgc.multiplications.*;
+import es.ulpgc.multiplications.notparallel.DenseMatrixLoopInterchangeMultiplication;
+import es.ulpgc.multiplications.notparallel.DenseMatrixStandardMultiplication;
+import es.ulpgc.multiplications.notparallel.DenseMatrixTransposedMultiplication;
+import es.ulpgc.multiplications.parallel.*;
 import es.ulpgc.transposers.DenseMatrixTransposer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +19,7 @@ import static org.assertj.core.api.Assertions.*;
 @RunWith(Parameterized.class)
 public class DenseMatrixMultiplicationTest {
 
-    private final int SIZE = 1024;
+    private final int SIZE = 150;
 
     private final Multiplication multiplication;
 

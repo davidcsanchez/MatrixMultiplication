@@ -1,7 +1,9 @@
 import es.ulpgc.Matrix;
 import es.ulpgc.Multiplication;
 import es.ulpgc.builders.SparseMatrixBuilder;
-import es.ulpgc.multiplications.*;
+import es.ulpgc.multiplications.notparallel.SparseMatrixStandardMultiplication;
+import es.ulpgc.multiplications.notparallel.SparseMatrixTransposedMultiplication;
+import es.ulpgc.multiplications.parallel.*;
 import es.ulpgc.transposers.SparseMatrixTransposer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Parameterized.class)
 public class SparseMatrixMultiplicationTest {
-    private final int SIZE = 80;
+    private final int SIZE = 150;
     private final Multiplication multiplication;
 
     public SparseMatrixMultiplicationTest(Multiplication multiplication) {
@@ -26,7 +28,7 @@ public class SparseMatrixMultiplicationTest {
         Matrix b = randomSparseMatrix();
         Matrix c = multiplication.execute(a, b);
         Vector vector = new Vector(SIZE);
-        assertThat(vector.multiply(c)).isEqualTo(vector.multiply(b).multiply(a));
+        assertThat(vector.multiply(c)).as("testing..." + multiplication).isEqualTo(vector.multiply(b).multiply(a));
     }
 
     private Matrix randomSparseMatrix() {

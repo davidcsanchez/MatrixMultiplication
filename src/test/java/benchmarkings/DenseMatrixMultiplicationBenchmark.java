@@ -3,10 +3,10 @@ package benchmarkings;
 import es.ulpgc.Matrix;
 import es.ulpgc.Multiplication;
 import es.ulpgc.matrices.DenseMatrix;
-import es.ulpgc.multiplications.DenseMatrixParallelStreamMultiplication;
-import es.ulpgc.multiplications.DenseMatrixLoopInterchangeMultiplication;
-import es.ulpgc.multiplications.DenseMatrixStandardMultiplication;
-import es.ulpgc.multiplications.DenseMatrixTransposedMultiplication;
+import es.ulpgc.multiplications.parallel.DenseMatrixParallelStreamMultiplication;
+import es.ulpgc.multiplications.notparallel.DenseMatrixLoopInterchangeMultiplication;
+import es.ulpgc.multiplications.notparallel.DenseMatrixStandardMultiplication;
+import es.ulpgc.multiplications.notparallel.DenseMatrixTransposedMultiplication;
 import es.ulpgc.transposers.DenseMatrixTransposer;
 import org.openjdk.jmh.annotations.*;
 

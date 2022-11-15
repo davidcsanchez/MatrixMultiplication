@@ -1,4 +1,4 @@
-package es.ulpgc.multiplications;
+package es.ulpgc.multiplications.parallel;
 
 import es.ulpgc.Matrix;
 import es.ulpgc.MatrixException;
@@ -8,12 +8,14 @@ import es.ulpgc.matrices.SparseMatrix;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-public class SparseMatrixThreadPoolMultiplication implements Multiplication {
+public class SparseMatrixSemaphoreMultiplication implements Multiplication {
 
     private static ExecutorService executorService;
-    private static double[][] result;
+    private Semaphore semaphore;
+    private double[][] result;
 
     @Override
     public Matrix execute(Matrix a, Matrix b) {
@@ -21,9 +23,13 @@ public class SparseMatrixThreadPoolMultiplication implements Multiplication {
         checkIsSparseMatrix(b);
         a = Matrix.create(a.raw());
         b = Matrix.create(b.raw());
-        result = new double[a.size()][a.size()];
+        semaphore = new Semaphore(1);
         executorService = Executors.newFixedThreadPool(a.size());
-        for (int i = 0; i < a.size(); i++) submit(a, b, a.size(), i);
+        result = new double[a.size()][a.size()];
+        for (int i = 0; i < a.size(); i++)
+            for (int k = 0; k < a.size(); k++)
+                for (int j = 0; j < a.size(); j++)
+                    submit(a, b, k, i, j);
         try {
             executorService.shutdown();
             executorService.awaitTermination(1000, TimeUnit.SECONDS);
@@ -33,18 +39,22 @@ public class SparseMatrixThreadPoolMultiplication implements Multiplication {
         return new DenseMatrix(result);
     }
 
-    private void submit(Matrix a, Matrix b, int size, int i) {
+    private void submit(Matrix a, Matrix b, int k, int i, int j) {
         executorService.submit(() -> {
-            for (int k = 0; k < size; k++)
-                for (int j = 0; j < size; j++) {
-                    if (a.value(i, k) == 0 || b.value(k, j) == 0) continue;
-                    result[i][j] += a.value(i, k) * b.value(k, j);
-                }
+            try {
+                if (a.value(i, k) == 0 || b.value(k, j) == 0) return;
+                double value = a.value(i, k) * b.value(k, j);
+                semaphore.acquire();
+                result[i][j] += value;
+                semaphore.release();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         });
     }
 
     private void checkIsSparseMatrix(Matrix matrix) {
         if (matrix instanceof SparseMatrix) return;
-        throw new MatrixException("Supplied Matrix is of unsupported type.");
+        throw new MatrixException("Supplied Matrix is of unsupported type");
     }
 }

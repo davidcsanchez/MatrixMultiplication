@@ -3,8 +3,8 @@ package benchmarkings;
 import es.ulpgc.Matrix;
 import es.ulpgc.Multiplication;
 import es.ulpgc.builders.SparseMatrixBuilder;
-import es.ulpgc.multiplications.SparseMatrixStandardMultiplication;
-import es.ulpgc.multiplications.SparseMatrixTransposedMultiplication;
+import es.ulpgc.multiplications.notparallel.SparseMatrixStandardMultiplication;
+import es.ulpgc.multiplications.notparallel.SparseMatrixTransposedMultiplication;
 import es.ulpgc.transposers.SparseMatrixTransposer;
 import org.openjdk.jmh.annotations.*;
 
