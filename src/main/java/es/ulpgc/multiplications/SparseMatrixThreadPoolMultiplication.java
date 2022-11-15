@@ -19,12 +19,11 @@ public class SparseMatrixThreadPoolMultiplication implements Multiplication {
     public Matrix execute(Matrix a, Matrix b) {
         checkIsSparseMatrix(a);
         checkIsSparseMatrix(b);
-        int size = a.size();
-        double[][] aValues = a.raw();
-        double[][] bValues = b.raw();
-        result = new double[size][size];
-        executorService = Executors.newFixedThreadPool(size);
-        for (int i = 0; i < size; i++) submit(aValues, bValues, size, i);
+        a = Matrix.create(a.raw());
+        b = Matrix.create(b.raw());
+        result = new double[a.size()][a.size()];
+        executorService = Executors.newFixedThreadPool(a.size());
+        for (int i = 0; i < a.size(); i++) submit(a, b, a.size(), i);
         try {
             executorService.shutdown();
             executorService.awaitTermination(1000, TimeUnit.SECONDS);
@@ -34,12 +33,12 @@ public class SparseMatrixThreadPoolMultiplication implements Multiplication {
         return new DenseMatrix(result);
     }
 
-    private void submit(double[][] a, double[][] b, int size, int i) {
+    private void submit(Matrix a, Matrix b, int size, int i) {
         executorService.submit(() -> {
             for (int k = 0; k < size; k++)
                 for (int j = 0; j < size; j++) {
-                    if (a[i][k] == 0 || b[k][j] == 0) continue;
-                    result[i][j] += a[i][k] * b[k][j];
+                    if (a.value(i, k) == 0 || b.value(k, j) == 0) continue;
+                    result[i][j] += a.value(i, k) * b.value(k, j);
                 }
         });
     }

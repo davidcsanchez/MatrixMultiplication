@@ -24,6 +24,7 @@ public class Vector {
     }
 
     public Vector multiply(Matrix matrix) {
+        matrix = Matrix.create(matrix.raw());
         double[] result = new double[values.length];
         for (int i = 0; i < matrix.size(); i++) {
             for (int j = 0; j < result.length; j++) {

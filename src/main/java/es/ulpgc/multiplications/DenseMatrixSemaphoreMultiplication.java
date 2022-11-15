@@ -20,13 +20,12 @@ public class DenseMatrixSemaphoreMultiplication implements Multiplication {
     public Matrix execute(Matrix a, Matrix b) {
         checkIsDenseMatrix(a);
         checkIsDenseMatrix(b);
-        int size = a.size();
         semaphore = new Semaphore(1);
-        executorService = Executors.newFixedThreadPool(size);
-        result = new double[size][size];
-        for (int i = 0; i < size; i++)
-            for (int k = 0; k < size; k++)
-                for (int j = 0; j < size; j++)
+        executorService = Executors.newFixedThreadPool(a.size());
+        result = new double[a.size()][a.size()];
+        for (int i = 0; i < a.size(); i++)
+            for (int k = 0; k < a.size(); k++)
+                for (int j = 0; j < a.size(); j++)
                     submit(a, b, k, i, j);
         try {
             executorService.shutdown();

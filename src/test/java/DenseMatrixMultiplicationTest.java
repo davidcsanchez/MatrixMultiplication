@@ -30,7 +30,7 @@ public class DenseMatrixMultiplicationTest {
         Matrix b = randomMatrix();
         Matrix c = multiplication.execute(a,b);
         Vector vector = new Vector(SIZE);
-        assertThat(vector.multiply(c)).isEqualTo(vector.multiply(b).multiply(a));
+        assertThat(vector.multiply(c)).as("testing..." + multiplication).isEqualTo(vector.multiply(b).multiply(a));
     }
 
     private Matrix randomMatrix() {
@@ -56,7 +56,8 @@ public class DenseMatrixMultiplicationTest {
             new DenseMatrixParallelSynchronizedMultiplication(),
             new DenseMatrixSemaphoreMultiplication(),
             new DenseMatrixThreadPoolMultiplication(),
-            new DenseMatrixSemaphoreMultiplication()
+            new DenseMatrixSemaphoreMultiplication(),
+            new DenseMatrixAtomicMultiplication()
         );
     }
 }

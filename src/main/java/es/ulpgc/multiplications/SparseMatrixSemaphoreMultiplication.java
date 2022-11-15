@@ -21,16 +21,15 @@ public class SparseMatrixSemaphoreMultiplication implements Multiplication {
     public Matrix execute(Matrix a, Matrix b) {
         checkIsSparseMatrix(a);
         checkIsSparseMatrix(b);
-        int size = a.size();
-        double[][] aValues = a.raw();
-        double[][] bValues = b.raw();
+        a = Matrix.create(a.raw());
+        b = Matrix.create(b.raw());
         semaphore = new Semaphore(1);
-        executorService = Executors.newFixedThreadPool(size);
-        result = new double[size][size];
-        for (int i = 0; i < size; i++)
-            for (int k = 0; k < size; k++)
-                for (int j = 0; j < size; j++)
-                    submit(aValues, bValues, k, i, j);
+        executorService = Executors.newFixedThreadPool(a.size());
+        result = new double[a.size()][a.size()];
+        for (int i = 0; i < a.size(); i++)
+            for (int k = 0; k < a.size(); k++)
+                for (int j = 0; j < a.size(); j++)
+                    submit(a, b, k, i, j);
         try {
             executorService.shutdown();
             executorService.awaitTermination(1000, TimeUnit.SECONDS);
@@ -40,11 +39,11 @@ public class SparseMatrixSemaphoreMultiplication implements Multiplication {
         return new DenseMatrix(result);
     }
 
-    private void submit(double[][] a, double[][] b, int k, int i, int j) {
+    private void submit(Matrix a, Matrix b, int k, int i, int j) {
         executorService.submit(() -> {
             try {
-                if (a[i][k] == 0 || b[k][j] == 0) return;
-                double value = a[i][k] * b[k][j];
+                if (a.value(i, k) == 0 || b.value(k, j) == 0) return;
+                double value = a.value(i, k) * b.value(k, j);
                 semaphore.acquire();
                 result[i][j] += value;
                 semaphore.release();

@@ -60,7 +60,8 @@ public class SparseMatrixMultiplicationTest {
             new SparseMatrixParallelMultiplication(),
             new SparseMatrixParallelSynchronizedMultiplication(),
             new SparseMatrixThreadPoolMultiplication(),
-            new SparseMatrixSemaphoreMultiplication()
+            new SparseMatrixSemaphoreMultiplication(),
+            new SparseMatrixAtomicMultiplication()
         );
     }
 }

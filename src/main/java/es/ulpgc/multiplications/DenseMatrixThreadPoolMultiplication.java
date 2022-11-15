@@ -18,10 +18,9 @@ public class DenseMatrixThreadPoolMultiplication implements Multiplication {
     public Matrix execute(Matrix a, Matrix b) {
         checkIsDenseMatrix(a);
         checkIsDenseMatrix(b);
-        int size = a.size();
-        executorService = Executors.newFixedThreadPool(size);
-        result = new double[size][size];
-        for (int i = 0; i < size; i++) submit(a, b, size, i);
+        executorService = Executors.newFixedThreadPool(a.size());
+        result = new double[a.size()][a.size()];
+        for (int i = 0; i < a.size(); i++) submit(a, b, a.size(), i);
         try {
             executorService.shutdown();
             executorService.awaitTermination(1000, TimeUnit.SECONDS);
