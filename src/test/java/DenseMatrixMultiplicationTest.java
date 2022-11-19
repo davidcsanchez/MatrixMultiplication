@@ -1,7 +1,10 @@
 import es.ulpgc.Matrix;
 import es.ulpgc.Multiplication;
 import es.ulpgc.matrices.DenseMatrix;
-import es.ulpgc.multiplications.*;
+import es.ulpgc.multiplications.notparallel.DenseMatrixLoopInterchangeMultiplication;
+import es.ulpgc.multiplications.notparallel.DenseMatrixStandardMultiplication;
+import es.ulpgc.multiplications.notparallel.DenseMatrixTransposedMultiplication;
+import es.ulpgc.multiplications.parallel.*;
 import es.ulpgc.transposers.DenseMatrixTransposer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +19,7 @@ import static org.assertj.core.api.Assertions.*;
 @RunWith(Parameterized.class)
 public class DenseMatrixMultiplicationTest {
 
-    private final int SIZE = 1024;
+    private final int SIZE = 150;
 
     private final Multiplication multiplication;
 
@@ -30,7 +33,7 @@ public class DenseMatrixMultiplicationTest {
         Matrix b = randomMatrix();
         Matrix c = multiplication.execute(a,b);
         Vector vector = new Vector(SIZE);
-        assertThat(vector.multiply(c)).isEqualTo(vector.multiply(b).multiply(a));
+        assertThat(vector.multiply(c)).as("testing..." + multiplication).isEqualTo(vector.multiply(b).multiply(a));
     }
 
     private Matrix randomMatrix() {
@@ -48,12 +51,16 @@ public class DenseMatrixMultiplicationTest {
     @Parameterized.Parameters
     public static Collection<Multiplication> implementations() {
         return List.of(
-                new DenseMatrixStandardMultiplication(),
-                new DenseMatrixLoopInterchangeMultiplication(),
-                new DenseMatrixTransposedMultiplication(new DenseMatrixTransposer()),
-                new DenseMatrixParallelMultiplication(),
-                new DenseMatrixParallelStreamMultiplication(),
-                new DenseMatrixParallelSynchronizedMultiplication()
+            new DenseMatrixStandardMultiplication(),
+            new DenseMatrixLoopInterchangeMultiplication(),
+            new DenseMatrixTransposedMultiplication(new DenseMatrixTransposer()),
+            new DenseMatrixParallelMultiplication(),
+            new DenseMatrixParallelStreamMultiplication(),
+            new DenseMatrixParallelSynchronizedMultiplication(),
+            new DenseMatrixSemaphoreMultiplication(),
+            new DenseMatrixThreadPoolMultiplication(),
+            new DenseMatrixSemaphoreMultiplication(),
+            new DenseMatrixAtomicMultiplication()
         );
     }
 }

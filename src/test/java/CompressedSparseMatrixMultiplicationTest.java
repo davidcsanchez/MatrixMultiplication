@@ -2,7 +2,7 @@ import es.ulpgc.Matrix;
 import es.ulpgc.builders.SparseMatrixBuilder;
 import es.ulpgc.compressors.CcsCompressor;
 import es.ulpgc.compressors.CrsCompressor;
-import es.ulpgc.multiplications.CompressedSparseMatrixMultiplication;
+import es.ulpgc.multiplications.notparallel.CompressedSparseMatrixMultiplication;
 import org.junit.Test;
 
 import java.util.ArrayList;

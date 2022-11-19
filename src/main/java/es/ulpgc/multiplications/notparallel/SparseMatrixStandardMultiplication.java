@@ -1,4 +1,4 @@
-package es.ulpgc.multiplications;
+package es.ulpgc.multiplications.notparallel;
 
 import es.ulpgc.Matrix;
 import es.ulpgc.MatrixException;
@@ -11,17 +11,16 @@ public class SparseMatrixStandardMultiplication implements Multiplication {
     public Matrix execute(Matrix a, Matrix b) {
         checkIsSparseMatrix(a);
         checkIsSparseMatrix(b);
-        int size = a.size();
-        double[][] aValues = a.raw();
-        double[][] bValues = b.raw();
+        a = Matrix.create(a.raw());
+        b = Matrix.create(b.raw());
         double sum;
-        SparseMatrixBuilder builder = new SparseMatrixBuilder(size);
-        for (int i = 0; i < size; i++)
-            for (int j = 0; j < size; j++) {
+        SparseMatrixBuilder builder = new SparseMatrixBuilder(a.size());
+        for (int i = 0; i < a.size(); i++)
+            for (int j = 0; j < a.size(); j++) {
                 sum = 0;
-                for (int k = 0; k < size; k++) {
-                    if (aValues[i][k] == 0 || bValues[k][j] == 0) continue;
-                    sum += aValues[i][k] * bValues[k][j];
+                for (int k = 0; k < a.size(); k++) {
+                    if (a.value(i, k) == 0 || b.value(k, j) == 0) continue;
+                    sum += a.value(i, k) * b.value(k, j);
                 }
                 builder.set(i, j, sum);
             }

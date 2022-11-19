@@ -1,4 +1,4 @@
-package es.ulpgc.multiplications;
+package es.ulpgc.multiplications.notparallel;
 
 import es.ulpgc.Matrix;
 import es.ulpgc.MatrixException;
@@ -10,11 +10,10 @@ public class DenseMatrixLoopInterchangeMultiplication implements Multiplication 
     public Matrix execute(Matrix a, Matrix b) {
         checkIsDenseMatrix(a);
         checkIsDenseMatrix(b);
-        int size = a.size();
-        double[][] c = new double[size][size];
-        for (int i = 0; i < size; i++)
-            for (int k = 0; k < size; k++)
-                for (int j = 0; j < size; j++)
+        double[][] c = new double[a.size()][a.size()];
+        for (int i = 0; i < a.size(); i++)
+            for (int k = 0; k < a.size(); k++)
+                for (int j = 0; j < a.size(); j++)
                     c[i][j] += a.value(i, k) * b.value(k, j);
         return new DenseMatrix(c);
     }

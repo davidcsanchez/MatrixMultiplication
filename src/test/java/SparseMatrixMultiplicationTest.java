@@ -1,10 +1,9 @@
 import es.ulpgc.Matrix;
 import es.ulpgc.Multiplication;
 import es.ulpgc.builders.SparseMatrixBuilder;
-import es.ulpgc.multiplications.SparseMatrixParallelMultiplication;
-import es.ulpgc.multiplications.SparseMatrixParallelSynchronizedMultiplication;
-import es.ulpgc.multiplications.SparseMatrixStandardMultiplication;
-import es.ulpgc.multiplications.SparseMatrixTransposedMultiplication;
+import es.ulpgc.multiplications.notparallel.SparseMatrixStandardMultiplication;
+import es.ulpgc.multiplications.notparallel.SparseMatrixTransposedMultiplication;
+import es.ulpgc.multiplications.parallel.*;
 import es.ulpgc.transposers.SparseMatrixTransposer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,11 +11,11 @@ import org.junit.runners.Parameterized;
 
 import java.util.*;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Parameterized.class)
 public class SparseMatrixMultiplicationTest {
-    private final int SIZE = 50;
+    private final int SIZE = 150;
     private final Multiplication multiplication;
 
     public SparseMatrixMultiplicationTest(Multiplication multiplication) {
@@ -29,7 +28,7 @@ public class SparseMatrixMultiplicationTest {
         Matrix b = randomSparseMatrix();
         Matrix c = multiplication.execute(a, b);
         Vector vector = new Vector(SIZE);
-        assertThat(vector.multiply(c)).isEqualTo(vector.multiply(b).multiply(a));
+        assertThat(vector.multiply(c)).as("testing..." + multiplication).isEqualTo(vector.multiply(b).multiply(a));
     }
 
     private Matrix randomSparseMatrix() {
@@ -58,10 +57,13 @@ public class SparseMatrixMultiplicationTest {
     @Parameterized.Parameters
     public static Collection<Multiplication> implementation() {
         return List.of(
-                new SparseMatrixStandardMultiplication(),
-                new SparseMatrixTransposedMultiplication(new SparseMatrixTransposer()),
-                new SparseMatrixParallelMultiplication(),
-                new SparseMatrixParallelSynchronizedMultiplication()
+            new SparseMatrixStandardMultiplication(),
+            new SparseMatrixTransposedMultiplication(new SparseMatrixTransposer()),
+            new SparseMatrixParallelMultiplication(),
+            new SparseMatrixParallelSynchronizedMultiplication(),
+            new SparseMatrixThreadPoolMultiplication(),
+            new SparseMatrixSemaphoreMultiplication(),
+            new SparseMatrixAtomicMultiplication()
         );
     }
 }

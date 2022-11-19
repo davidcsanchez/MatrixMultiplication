@@ -5,7 +5,7 @@ import es.ulpgc.Multiplication;
 import es.ulpgc.builders.SparseMatrixBuilder;
 import es.ulpgc.compressors.CcsCompressor;
 import es.ulpgc.compressors.CrsCompressor;
-import es.ulpgc.multiplications.CompressedSparseMatrixMultiplication;
+import es.ulpgc.multiplications.notparallel.CompressedSparseMatrixMultiplication;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.ArrayList;
@@ -28,7 +28,6 @@ public class CompressedSparseMatrixMultiplicationBenchmark {
     }
 
     private static Matrix CcsRandomMatrix() {
-        Random random = new Random();
         SparseMatrixBuilder builder = new SparseMatrixBuilder(SIZE);
         for (int column = 0; column < SIZE; column++) {
             List<Integer> randomPositions = getRandomPositions(random);
@@ -40,7 +39,6 @@ public class CompressedSparseMatrixMultiplicationBenchmark {
     }
 
     private static Matrix CrsRandomMatrix() {
-        Random random = new Random();
         SparseMatrixBuilder builder = new SparseMatrixBuilder(SIZE);
         for (int column = 0; column < SIZE; column++) {
             List<Integer> randomPositions = getRandomPositions(random);
