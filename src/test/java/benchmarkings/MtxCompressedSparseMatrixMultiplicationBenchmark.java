@@ -3,7 +3,7 @@ package benchmarkings;
 import es.ulpgc.Multiplication;
 import es.ulpgc.deserializers.MtxToCssMatrixDeserializer;
 import es.ulpgc.matrices.CcsMatrix;
-import es.ulpgc.multiplications.notparallel.CompressedSparseMatrixMultiplication;
+import es.ulpgc.multiplications.sequentials.CompressedSparseMatrixMultiplication;
 import es.ulpgc.transposers.CcsMatrixTransposer;
 import org.openjdk.jmh.annotations.*;
 

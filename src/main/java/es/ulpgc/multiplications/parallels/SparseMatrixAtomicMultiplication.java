@@ -1,23 +1,24 @@
-package es.ulpgc.multiplications.parallel;
+package es.ulpgc.multiplications.parallels;
 
 import es.ulpgc.Matrix;
 import es.ulpgc.MatrixException;
 import es.ulpgc.Multiplication;
 import es.ulpgc.matrices.DenseMatrix;
+import es.ulpgc.matrices.SparseMatrix;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-public class DenseMatrixAtomicMultiplication implements Multiplication {
+public class SparseMatrixAtomicMultiplication implements Multiplication {
 
     private static ExecutorService executorService;
 
     @Override
     public Matrix execute(Matrix a, Matrix b) {
-        checkIsDenseMatrix(a);
-        checkIsDenseMatrix(b);
+        checkIsSparseMatrix(a);
+        checkIsSparseMatrix(b);
         AtomicDouble[][] atomicDoubles = createEmptyAtomicDoubleMatrix(a.size());
         executorService = Executors.newFixedThreadPool(a.size());
         for (int i = 0; i < a.size(); i++)
@@ -44,18 +45,22 @@ public class DenseMatrixAtomicMultiplication implements Multiplication {
     private double[][] getDoubleValues(AtomicDouble[][] atomicDoubles) {
         double[][] result = new double[atomicDoubles.length][atomicDoubles.length];
         for (int i = 0; i < atomicDoubles.length; i++)
-            for (int j = 0; j < atomicDoubles.length; j++)
+            for (int j = 0; j < atomicDoubles.length; j++){
                 result[i][j] = atomicDoubles[i][j].value();
+            }
         return result;
     }
 
     private void submit(Matrix a, Matrix b, AtomicDouble[][] atomicDoubles, int k, int i, int j) {
-        executorService.submit(() -> atomicDoubles[i][j].value(a.value(i, k) * b.value(k, j)));
+        executorService.submit(() -> {
+            if (a.value(i, k) == 0 || b.value(k, j) == 0) return;
+            atomicDoubles[i][j].value(a.value(i, k) * b.value(k, j));
+        });
     }
 
-    private void checkIsDenseMatrix(Matrix matrix) {
-        if (matrix instanceof DenseMatrix) return;
-        throw new MatrixException("Supplied Matrix is of unsupported type");
+    private void checkIsSparseMatrix(Matrix matrix) {
+        if (matrix instanceof SparseMatrix) return;
+        throw new MatrixException("Supplied Matrix is of unsupported type.");
     }
 
     private static class AtomicDouble {

@@ -1,4 +1,4 @@
-package es.ulpgc.multiplications.notparallel;
+package es.ulpgc.multiplications.sequentials;
 
 import es.ulpgc.Matrix;
 import es.ulpgc.MatrixException;

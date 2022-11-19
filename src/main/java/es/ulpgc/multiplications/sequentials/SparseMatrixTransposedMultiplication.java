@@ -1,4 +1,4 @@
-package es.ulpgc.multiplications.notparallel;
+package es.ulpgc.multiplications.sequentials;
 
 import es.ulpgc.Matrix;
 import es.ulpgc.MatrixException;
@@ -18,15 +18,14 @@ public class SparseMatrixTransposedMultiplication implements Multiplication {
     public Matrix execute(Matrix a, Matrix b) {
         checkIsSparseMatrix(a);
         checkIsSparseMatrix(b);
-        Matrix transposed = transposer.execute(Matrix.create(b.raw()));
-        int size = a.size();
         a = Matrix.create(a.raw());
+        Matrix transposed = transposer.execute(b);
         double sum;
-        SparseMatrixBuilder builder = new SparseMatrixBuilder(size);
-        for (int i = 0; i < size; i++)
-            for (int j = 0; j < size; j++) {
+        SparseMatrixBuilder builder = new SparseMatrixBuilder(a.size());
+        for (int i = 0; i < a.size(); i++)
+            for (int j = 0; j < a.size(); j++) {
                 sum = 0;
-                for (int k = 0; k < size; k++) {
+                for (int k = 0; k < a.size(); k++) {
                     if (a.value(i, k) == 0 || transposed.value(j, k) == 0) continue;
                     sum += a.value(i, k) * transposed.value(j, k);
                 }

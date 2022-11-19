@@ -1,4 +1,4 @@
-package es.ulpgc.multiplications.notparallel;
+package es.ulpgc.multiplications.sequentials;
 
 import es.ulpgc.Matrix;
 import es.ulpgc.MatrixException;
@@ -18,11 +18,10 @@ public class DenseMatrixTransposedMultiplication implements Multiplication {
         checkIsDenseMatrix(a);
         checkIsDenseMatrix(b);
         Matrix transposed = transposer.execute(b);
-        int size = a.size();
-        double[][] c = new double[size][size];
-        for (int i = 0; i < size; i++)
-            for (int j = 0; j < size; j++)
-                for (int k = 0; k < size; k++)
+        double[][] c = new double[a.size()][a.size()];
+        for (int i = 0; i < a.size(); i++)
+            for (int j = 0; j < a.size(); j++)
+                for (int k = 0; k < a.size(); k++)
                     c[i][j] += a.value(i, k) * transposed.value(j, k);
         return new DenseMatrix(c);
     }

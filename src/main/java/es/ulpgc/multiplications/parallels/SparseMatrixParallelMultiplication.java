@@ -1,4 +1,4 @@
-package es.ulpgc.multiplications.parallel;
+package es.ulpgc.multiplications.parallels;
 
 import es.ulpgc.Matrix;
 import es.ulpgc.MatrixException;
@@ -14,6 +14,7 @@ public class SparseMatrixParallelMultiplication implements Multiplication {
 
     private static final int MAX_THREADS = Runtime.getRuntime().availableProcessors();
     List<Thread> threads = new ArrayList<>(MAX_THREADS);
+
 
     @Override
     public Matrix execute(Matrix a, Matrix b) {

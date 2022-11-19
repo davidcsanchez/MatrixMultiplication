@@ -1,4 +1,4 @@
-package es.ulpgc.multiplications.notparallel;
+package es.ulpgc.multiplications.sequentials;
 
 import es.ulpgc.Matrix;
 import es.ulpgc.MatrixException;
@@ -22,7 +22,7 @@ public class SparseMatrixStandardMultiplication implements Multiplication {
                     if (a.value(i, k) == 0 || b.value(k, j) == 0) continue;
                     sum += a.value(i, k) * b.value(k, j);
                 }
-                builder.set(i, j, sum);
+                if (sum != 0) builder.set(i, j, sum);
             }
         return builder.build();
     }
