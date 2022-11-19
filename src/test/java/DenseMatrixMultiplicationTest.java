@@ -1,10 +1,10 @@
 import es.ulpgc.Matrix;
 import es.ulpgc.Multiplication;
 import es.ulpgc.matrices.DenseMatrix;
-import es.ulpgc.multiplications.notparallel.DenseMatrixLoopInterchangeMultiplication;
-import es.ulpgc.multiplications.notparallel.DenseMatrixStandardMultiplication;
-import es.ulpgc.multiplications.notparallel.DenseMatrixTransposedMultiplication;
-import es.ulpgc.multiplications.parallel.*;
+import es.ulpgc.multiplications.sequentials.DenseMatrixLoopInterchangeMultiplication;
+import es.ulpgc.multiplications.sequentials.DenseMatrixStandardMultiplication;
+import es.ulpgc.multiplications.sequentials.DenseMatrixTransposedMultiplication;
+import es.ulpgc.multiplications.parallels.*;
 import es.ulpgc.transposers.DenseMatrixTransposer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.*;
 @RunWith(Parameterized.class)
 public class DenseMatrixMultiplicationTest {
 
-    private final int SIZE = 150;
+    private final int SIZE = 200;
 
     private final Multiplication multiplication;
 
@@ -56,9 +56,8 @@ public class DenseMatrixMultiplicationTest {
             new DenseMatrixTransposedMultiplication(new DenseMatrixTransposer()),
             new DenseMatrixParallelMultiplication(),
             new DenseMatrixParallelStreamMultiplication(),
-            new DenseMatrixParallelSynchronizedMultiplication(),
-            new DenseMatrixSemaphoreMultiplication(),
             new DenseMatrixThreadPoolMultiplication(),
+            new DenseMatrixParallelSynchronizedMultiplication(),
             new DenseMatrixSemaphoreMultiplication(),
             new DenseMatrixAtomicMultiplication()
         );
