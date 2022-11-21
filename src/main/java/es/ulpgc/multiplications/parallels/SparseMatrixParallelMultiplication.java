@@ -23,7 +23,7 @@ public class SparseMatrixParallelMultiplication implements Multiplication {
             checkIsSparseMatrix(b);
             double[][] c = new double[a.size()][a.size()];
             for (int i = 0; i < a.size(); i++) {
-                RowMultiplicationTask task = new RowMultiplicationTask(new DenseMatrix(a.raw()), new DenseMatrix(b.raw()), i, c);
+                RowMultiplicationTask task = new RowMultiplicationTask(Matrix.create(a.raw()), Matrix.create(b.raw()), i, c);
                 Thread thread = new Thread(task);
                 thread.start();
                 threads.add(thread);
