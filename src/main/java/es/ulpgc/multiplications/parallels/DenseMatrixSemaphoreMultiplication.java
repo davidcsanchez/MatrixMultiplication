@@ -13,14 +13,14 @@ import java.util.concurrent.TimeUnit;
 public class DenseMatrixSemaphoreMultiplication implements Multiplication {
 
     private static ExecutorService executorService;
-    private Semaphore semaphore;
+    private Semaphore[][] semaphores;
     private double[][] result;
 
     @Override
     public Matrix execute(Matrix a, Matrix b) {
         checkIsDenseMatrix(a);
         checkIsDenseMatrix(b);
-        semaphore = new Semaphore(1);
+        createSemaphores(a.size());
         executorService = Executors.newFixedThreadPool(a.size());
         result = new double[a.size()][a.size()];
         for (int i = 0; i < a.size(); i++)
@@ -36,13 +36,20 @@ public class DenseMatrixSemaphoreMultiplication implements Multiplication {
         return new DenseMatrix(result);
     }
 
+    private void createSemaphores(int size) {
+        semaphores = new Semaphore[size][size];
+        for (int i = 0; i < size; i++)
+            for (int j = 0; j < size; j++)
+                semaphores[i][j] = new Semaphore(1);
+    }
+
     private void submit(Matrix a, Matrix b, int k, int i, int j) {
         executorService.submit(() -> {
             try {
                 double value = a.value(i, k) * b.value(k, j);
-                semaphore.acquire();
+                semaphores[i][j].acquire();
                 result[i][j] += value;
-                semaphore.release();
+                semaphores[i][j].release();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

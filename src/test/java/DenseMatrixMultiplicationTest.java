@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.*;
 @RunWith(Parameterized.class)
 public class DenseMatrixMultiplicationTest {
 
-    private final int SIZE = 200;
+    private final int SIZE = 250;
 
     private final Multiplication multiplication;
 
