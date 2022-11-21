@@ -3,7 +3,7 @@ package es.ulpgc.multiplications.parallels;
 import es.ulpgc.Matrix;
 import es.ulpgc.MatrixException;
 import es.ulpgc.Multiplication;
-import es.ulpgc.matrices.DenseMatrix;
+import es.ulpgc.builders.SparseMatrixBuilder;
 import es.ulpgc.matrices.SparseMatrix;
 
 import java.util.concurrent.ExecutorService;
@@ -21,6 +21,7 @@ public class SparseMatrixThreadPoolMultiplication implements Multiplication {
         checkIsSparseMatrix(b);
         a = Matrix.create(a.raw());
         b = Matrix.create(b.raw());
+        SparseMatrixBuilder builder = new SparseMatrixBuilder(a.size());
         result = new double[a.size()][a.size()];
         executorService = Executors.newFixedThreadPool(a.size());
         for (int i = 0; i < a.size(); i++) submit(a, b, a.size(), i);
@@ -30,7 +31,8 @@ public class SparseMatrixThreadPoolMultiplication implements Multiplication {
         } catch (InterruptedException e) {
             throw new RuntimeException();
         }
-        return new DenseMatrix(result);
+        builder.set(Matrix.create(result));
+        return builder.build();
     }
 
     private void submit(Matrix a, Matrix b, int size, int i) {
