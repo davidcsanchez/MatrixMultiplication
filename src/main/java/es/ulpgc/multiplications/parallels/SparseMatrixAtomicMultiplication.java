@@ -3,7 +3,7 @@ package es.ulpgc.multiplications.parallels;
 import es.ulpgc.Matrix;
 import es.ulpgc.MatrixException;
 import es.ulpgc.Multiplication;
-import es.ulpgc.matrices.DenseMatrix;
+import es.ulpgc.builders.SparseMatrixBuilder;
 import es.ulpgc.matrices.SparseMatrix;
 
 import java.util.concurrent.ExecutorService;
@@ -31,7 +31,7 @@ public class SparseMatrixAtomicMultiplication implements Multiplication {
         } catch (InterruptedException e) {
             throw new RuntimeException();
         }
-        return new DenseMatrix(getDoubleValues(atomicDoubles));
+        return toSparse(atomicDoubles);
     }
 
     private AtomicDouble[][] createEmptyAtomicDoubleMatrix(int size) {
@@ -42,13 +42,13 @@ public class SparseMatrixAtomicMultiplication implements Multiplication {
         return atomicDoubles;
     }
 
-    private double[][] getDoubleValues(AtomicDouble[][] atomicDoubles) {
-        double[][] result = new double[atomicDoubles.length][atomicDoubles.length];
+    private Matrix toSparse(AtomicDouble[][] atomicDoubles) {
+        SparseMatrixBuilder builder = new SparseMatrixBuilder(atomicDoubles.length);
         for (int i = 0; i < atomicDoubles.length; i++)
             for (int j = 0; j < atomicDoubles.length; j++){
-                result[i][j] = atomicDoubles[i][j].value();
+                if (atomicDoubles[i][j].value != 0) builder.set(i, j, atomicDoubles[i][j].value);
             }
-        return result;
+        return builder.build();
     }
 
     private void submit(Matrix a, Matrix b, AtomicDouble[][] atomicDoubles, int k, int i, int j) {
