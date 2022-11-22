@@ -14,6 +14,7 @@ public class DenseMatrixSemaphoreMultiplication implements Multiplication {
 
     private static ExecutorService executorService;
     private Semaphore[][] semaphores;
+    private static final int MAX_THREADS = Runtime.getRuntime().availableProcessors();
     private double[][] result;
 
     @Override
@@ -21,7 +22,7 @@ public class DenseMatrixSemaphoreMultiplication implements Multiplication {
         checkIsDenseMatrix(a);
         checkIsDenseMatrix(b);
         createSemaphores(a.size());
-        executorService = Executors.newFixedThreadPool(a.size());
+        executorService = Executors.newFixedThreadPool(MAX_THREADS);
         result = new double[a.size()][a.size()];
         for (int i = 0; i < a.size(); i++)
             for (int k = 0; k < a.size(); k++)
