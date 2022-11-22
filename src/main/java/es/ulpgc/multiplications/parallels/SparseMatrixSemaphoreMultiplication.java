@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class SparseMatrixSemaphoreMultiplication implements Multiplication {
 
+    private static final int MAX_THREADS = Runtime.getRuntime().availableProcessors();
     private static ExecutorService executorService;
     private Semaphore[][] semaphores;
     private double[][] result;
@@ -24,7 +25,7 @@ public class SparseMatrixSemaphoreMultiplication implements Multiplication {
         a = Matrix.create(a.raw());
         b = Matrix.create(b.raw());
         createSemaphores(a.size());
-        executorService = Executors.newFixedThreadPool(a.size());
+        executorService = Executors.newFixedThreadPool(MAX_THREADS);
         result = new double[a.size()][a.size()];
         for (int i = 0; i < a.size(); i++)
             for (int k = 0; k < a.size(); k++)

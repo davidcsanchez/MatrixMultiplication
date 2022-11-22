@@ -45,9 +45,8 @@ public class SparseMatrixAtomicMultiplication implements Multiplication {
     private Matrix toSparse(AtomicDouble[][] atomicDoubles) {
         SparseMatrixBuilder builder = new SparseMatrixBuilder(atomicDoubles.length);
         for (int i = 0; i < atomicDoubles.length; i++)
-            for (int j = 0; j < atomicDoubles.length; j++){
+            for (int j = 0; j < atomicDoubles.length; j++)
                 if (atomicDoubles[i][j].value != 0) builder.set(i, j, atomicDoubles[i][j].value);
-            }
         return builder.build();
     }
 

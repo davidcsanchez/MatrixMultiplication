@@ -13,12 +13,13 @@ public class DenseMatrixThreadPoolMultiplication implements Multiplication {
 
     private static ExecutorService executorService;
     private static double[][] result;
+    private static final int MAX_THREADS = Runtime.getRuntime().availableProcessors();
 
     @Override
     public Matrix execute(Matrix a, Matrix b) {
         checkIsDenseMatrix(a);
         checkIsDenseMatrix(b);
-        executorService = Executors.newFixedThreadPool(a.size());
+        executorService = Executors.newFixedThreadPool(MAX_THREADS);
         result = new double[a.size()][a.size()];
         for (int i = 0; i < a.size(); i++) submit(a, b, a.size(), i);
         try {

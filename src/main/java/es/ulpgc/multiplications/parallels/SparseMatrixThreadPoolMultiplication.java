@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 public class SparseMatrixThreadPoolMultiplication implements Multiplication {
 
     private static ExecutorService executorService;
+    private static final int MAX_THREADS = Runtime.getRuntime().availableProcessors();
     private static double[][] result;
 
     @Override
@@ -21,7 +22,7 @@ public class SparseMatrixThreadPoolMultiplication implements Multiplication {
         checkIsSparseMatrix(b);
         a = Matrix.create(a.raw());
         b = Matrix.create(b.raw());
-        SparseMatrixBuilder builder = new SparseMatrixBuilder(a.size());
+        SparseMatrixBuilder builder = new SparseMatrixBuilder(MAX_THREADS);
         result = new double[a.size()][a.size()];
         executorService = Executors.newFixedThreadPool(a.size());
         for (int i = 0; i < a.size(); i++) submit(a, b, a.size(), i);
