@@ -5,7 +5,7 @@ import es.ulpgc.Multiplication;
 import es.ulpgc.builders.SparseMatrixBuilder;
 import es.ulpgc.compressors.CcsCompressor;
 import es.ulpgc.compressors.CrsCompressor;
-import es.ulpgc.multiplications.CompressedSparseMatrixMultiplication;
+import es.ulpgc.multiplications.sequentials.CompressedSparseMatrixMultiplication;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.ArrayList;
@@ -28,10 +28,9 @@ public class CompressedSparseMatrixMultiplicationBenchmark {
     }
 
     private static Matrix CcsRandomMatrix() {
-        Random random = new Random();
         SparseMatrixBuilder builder = new SparseMatrixBuilder(SIZE);
         for (int column = 0; column < SIZE; column++) {
-            List<Integer> randomPositions = getRandomPositions(random);
+            List<Integer> randomPositions = getRandomPositions();
             for (int row : randomPositions) {
                 builder.set(row, column ,random.nextDouble());
             }
@@ -40,10 +39,9 @@ public class CompressedSparseMatrixMultiplicationBenchmark {
     }
 
     private static Matrix CrsRandomMatrix() {
-        Random random = new Random();
         SparseMatrixBuilder builder = new SparseMatrixBuilder(SIZE);
         for (int column = 0; column < SIZE; column++) {
-            List<Integer> randomPositions = getRandomPositions(random);
+            List<Integer> randomPositions = getRandomPositions();
             for (int row : randomPositions) {
                 builder.set(row, column ,random.nextDouble());
             }
@@ -51,13 +49,13 @@ public class CompressedSparseMatrixMultiplicationBenchmark {
         return new CrsCompressor(builder.build()).compress();
     }
 
-    private static List<Integer> getRandomPositions(Random random) {
+    private static List<Integer> getRandomPositions() {
         List<Integer> result = new ArrayList<>();
-        int amountToAdd = random.ints(0, SIZE / 2)
+        int amountToAdd = CompressedSparseMatrixMultiplicationBenchmark.random.ints(0, SIZE / 2)
                 .findFirst()
                 .getAsInt();
         for (int i = 0; i < amountToAdd; i++) {
-            result.add(random.ints(0, SIZE)
+            result.add(CompressedSparseMatrixMultiplicationBenchmark.random.ints(0, SIZE)
                     .findFirst()
                     .getAsInt());
         }

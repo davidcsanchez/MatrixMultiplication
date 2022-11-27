@@ -1,8 +1,9 @@
 import es.ulpgc.Matrix;
 import es.ulpgc.Multiplication;
 import es.ulpgc.builders.SparseMatrixBuilder;
-import es.ulpgc.multiplications.SparseMatrixStandardMultiplication;
-import es.ulpgc.multiplications.SparseMatrixTransposedMultiplication;
+import es.ulpgc.multiplications.sequentials.SparseMatrixStandardMultiplication;
+import es.ulpgc.multiplications.sequentials.SparseMatrixTransposedMultiplication;
+import es.ulpgc.multiplications.parallels.*;
 import es.ulpgc.transposers.SparseMatrixTransposer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,11 +11,11 @@ import org.junit.runners.Parameterized;
 
 import java.util.*;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Parameterized.class)
 public class SparseMatrixMultiplicationTest {
-    private final int SIZE = 80;
+    private final int SIZE = 50;
     private final Multiplication multiplication;
 
     public SparseMatrixMultiplicationTest(Multiplication multiplication) {
@@ -27,21 +28,21 @@ public class SparseMatrixMultiplicationTest {
         Matrix b = randomSparseMatrix();
         Matrix c = multiplication.execute(a, b);
         Vector vector = new Vector(SIZE);
-        assertThat(vector.multiply(c)).isEqualTo(vector.multiply(b).multiply(a));
+        assertThat(vector.multiply(c)).as("testing..." + multiplication).isEqualTo(vector.multiply(b).multiply(a));
     }
 
     private Matrix randomSparseMatrix() {
         Random random = new Random();
         SparseMatrixBuilder builder = new SparseMatrixBuilder(SIZE);
         for (int i = 0; i < SIZE; i++) {
-            List<Integer> positions = RandomPositions(random);
+            Set<Integer> positions = RandomPositions(random);
             for (Integer position : positions) builder.set(position, i, random.nextDouble());
         }
         return builder.build();
     }
 
-    private List<Integer> RandomPositions(Random random) {
-        List<Integer> result = new ArrayList<>();
+    private Set<Integer> RandomPositions(Random random) {
+        Set<Integer> result = new HashSet<>();
         int nonzeros = random.ints(0, SIZE / 2)
                 .findFirst()
                 .getAsInt();
@@ -56,8 +57,13 @@ public class SparseMatrixMultiplicationTest {
     @Parameterized.Parameters
     public static Collection<Multiplication> implementation() {
         return List.of(
-                new SparseMatrixStandardMultiplication(),
-                new SparseMatrixTransposedMultiplication(new SparseMatrixTransposer())
+            new SparseMatrixStandardMultiplication(),
+            new SparseMatrixTransposedMultiplication(new SparseMatrixTransposer()),
+            new SparseMatrixParallelMultiplication(),
+            new SparseMatrixParallelSynchronizedMultiplication(),
+            new SparseMatrixThreadPoolMultiplication(),
+            new SparseMatrixSemaphoreMultiplication(),
+            new SparseMatrixAtomicMultiplication()
         );
     }
 }

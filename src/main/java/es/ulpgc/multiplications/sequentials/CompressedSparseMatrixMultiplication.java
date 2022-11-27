@@ -1,4 +1,4 @@
-package es.ulpgc.multiplications;
+package es.ulpgc.multiplications.sequentials;
 
 import es.ulpgc.Matrix;
 import es.ulpgc.MatrixException;
@@ -14,10 +14,9 @@ public class CompressedSparseMatrixMultiplication implements Multiplication {
         checkIsCcs(b);
         CrsMatrix crsMatrix = (CrsMatrix) a;
         CcsMatrix ccsMatrix = (CcsMatrix) b;
-        int size = a.size();
-        SparseMatrixBuilder builder = new SparseMatrixBuilder(size);
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+        SparseMatrixBuilder builder = new SparseMatrixBuilder(a.size());
+        for (int i = 0; i < a.size(); i++) {
+            for (int j = 0; j < a.size(); j++) {
                 int ii = crsMatrix.rowPointers[i];
                 int iEnd = crsMatrix.rowPointers[i+1];
                 int jj = ccsMatrix.colPointers[j];

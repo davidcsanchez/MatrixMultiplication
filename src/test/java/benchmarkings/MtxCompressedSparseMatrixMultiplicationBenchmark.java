@@ -1,13 +1,9 @@
 package benchmarkings;
 
 import es.ulpgc.Multiplication;
-import es.ulpgc.compressors.CcsCompressor;
-import es.ulpgc.compressors.CrsCompressor;
 import es.ulpgc.deserializers.MtxToCssMatrixDeserializer;
-import es.ulpgc.deserializers.MtxToSparseMatrixDeserializer;
 import es.ulpgc.matrices.CcsMatrix;
-import es.ulpgc.matrices.SparseMatrix;
-import es.ulpgc.multiplications.CompressedSparseMatrixMultiplication;
+import es.ulpgc.multiplications.sequentials.CompressedSparseMatrixMultiplication;
 import es.ulpgc.transposers.CcsMatrixTransposer;
 import org.openjdk.jmh.annotations.*;
 

@@ -7,12 +7,12 @@ import es.ulpgc.builders.SparseMatrixBuilder;
 public class SparseMatrixTransposer implements MatrixTransposer {
     @Override
     public Matrix execute(Matrix matrix) {
-        int size = matrix.size();
-        SparseMatrixBuilder builder = new SparseMatrixBuilder(size);
-        for (int i = 0; i < size; i++)
-            for (int j = 0; j < size; j++) {
-                if (matrix.value(i, j) == 0) continue;
-                builder.set(j, i, matrix.value(i, j));
+        SparseMatrixBuilder builder = new SparseMatrixBuilder(matrix.size());
+        Matrix m = Matrix.create(matrix.raw());
+        for (int i = 0; i < m.size(); i++)
+            for (int j = 0; j < m.size(); j++) {
+                if (m.value(i, j) == 0) continue;
+                builder.set(j, i, m.value(i, j));
             }
         return builder.build();
     }
