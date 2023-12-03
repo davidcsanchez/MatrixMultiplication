@@ -2,16 +2,6 @@
 
 This project aims to benchmark various matrix multiplication implementations in Java. Different parallelization techniques and strategies are explored to find the most efficient approach.
 
-## Table of Contents
-
-- [Introduction](#introduction)
-- [Matrix Multiplication Implementations](#matrix-multiplication-implementations)
-- [Project Structure](#project-structure)
-- [How to Run](#how-to-run)
-- [Branches](#branches)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## Introduction
 
 Matrix multiplication is a fundamental operation in linear algebra and various algorithms and parallelization techniques can be applied to optimize its performance. This project investigates and benchmarks different matrix multiplication implementations to identify the most efficient one based on various criteria.
